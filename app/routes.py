@@ -12,18 +12,18 @@ from app.models import User
 @application.route('/index')
 @login_required
 def index():
-    user = {'username': 'Migul'}
-    posts = [
-        {
-            'author': {'username': 'John'},
-            'body': 'Beautiful day in Portland!'
-        },
-        {
-            'author': {'username': 'Susan'},
-            'body': 'The Avengers movie was so cool!'
-        }
-    ]
-    return render_template('index.html', user=user, posts=posts)  # ,title='Home',user=user)
+    # user = {'username': 'Migul'}
+    # posts = [
+    #     {
+    #         'author': {'username': 'John'},
+    #         'body': 'Beautiful day in Portland!'
+    #     },
+    #     {
+    #         'author': {'username': 'Susan'},
+    #         'body': 'The Avengers movie was so cool!'
+    #     }
+    # ]
+    return render_template('index.html')#, user=user, posts=posts) ,title='Home',user=user)
 
 
 # @application.route('/login')
@@ -32,7 +32,7 @@ def login():
     # current_user variable  comes from Flask -Login and can be used at any time during the handling to obtain the
     # user object that represents the client of the request.
     if current_user.is_authenticated:
-        return  redirect(url_for('index'))
+        return redirect(url_for('index'))
     form = forms.LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
@@ -41,7 +41,7 @@ def login():
             return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
-        if not next_page or url_parse(next_page).netloc !='':
+        if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('index')
         return redirect(next_page)
     return render_template('login.html', form=form)
